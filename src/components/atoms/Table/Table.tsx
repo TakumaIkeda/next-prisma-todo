@@ -5,7 +5,7 @@ type Props = {
 
 const Table = ({ children, headList }: Props) => {
   return (
-    <table className="table table-zebra hover">
+    <table className="w-full table table-zebra">
       {headList && (
         <thead>
           <tr>
