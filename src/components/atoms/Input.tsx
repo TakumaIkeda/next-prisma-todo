@@ -5,7 +5,12 @@ type Props = {
 
 const Input = ({ value, onChange }: Props) => {
   return (
-    <input type="text" className="input" value={value} onChange={onChange} />
+    <input
+      type="text"
+      className="input input-bordered focus:input-primary"
+      value={value}
+      onChange={onChange}
+    />
   );
 };
 
