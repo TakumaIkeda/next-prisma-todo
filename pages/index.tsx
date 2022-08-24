@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
 import Button from "~/components/atoms/Button";
 import Container from "~/components/atoms/Container";
 import Input from "~/components/atoms/Input";
@@ -9,8 +9,23 @@ import Table from "~/components/atoms/Table/Table";
 import TableRow from "~/components/atoms/Table/TableRow";
 import TableCell from "~/components/atoms/Table/TableCell";
 import { useState } from "react";
+import { PrismaClient, Task } from "@prisma/client";
 
-const Home: NextPage = () => {
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const prisma = new PrismaClient();
+  const tasks = await prisma.task.findMany();
+  return {
+    props: {
+      tasks,
+    },
+  };
+};
+
+type Props = {
+  tasks: Task[];
+};
+
+const Home: NextPage<Props> = ({ tasks }) => {
   const priorityOptions = [
     { value: "high", label: "High" },
     { value: "medium", label: "Medium" },
@@ -30,11 +45,13 @@ const Home: NextPage = () => {
       }),
     });
 
-    console.log(res);
+    const data = await res.json();
+    setNewTasks([...newTasks, data]);
   };
 
   const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("");
+  const [priority, setPriority] = useState("high");
+  const [newTasks, setNewTasks] = useState(tasks);
 
   return (
     <Container>
@@ -62,18 +79,12 @@ const Home: NextPage = () => {
       </form>
       <div className="mt-2">
         <Table headList={["Task", "Priority"]}>
-          <TableRow>
-            <TableCell>aa</TableCell>
-            <TableCell>aa</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>aa</TableCell>
-            <TableCell>aa</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>aa</TableCell>
-            <TableCell>aa</TableCell>
-          </TableRow>
+          {newTasks.map((task) => (
+            <TableRow key={task.id}>
+              <TableCell>{task.title}</TableCell>
+              <TableCell>{task.priority}</TableCell>
+            </TableRow>
+          ))}
         </Table>
       </div>
     </Container>
