@@ -15,6 +15,7 @@ const handler = async (
         priority,
       },
     });
+    console.log(task);
     res.status(201).json(task);
   } catch (e: unknown) {
     const error = e as Error;

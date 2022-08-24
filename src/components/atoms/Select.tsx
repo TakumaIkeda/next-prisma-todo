@@ -4,13 +4,15 @@ type Props = {
     label: string;
   }[];
   value: string;
+  name: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-const Select = ({ options, value, onChange }: Props): JSX.Element => {
+const Select = ({ options, value, name, onChange }: Props): JSX.Element => {
   return (
     <select
       className="select select-bordered focus:select-primary"
+      name={name}
       onChange={onChange}
       value={value}
     >
